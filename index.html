@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>English Helper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f3f3f3;
+            border-radius: 10px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        #translation {
+            margin-top: 15px;
+            padding: 10px;
+            background: white;
+            min-height: 40px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<h2>English Helper</h2>
+
+<input id="wordInput" type="text" placeholder="Введи англійське слово">
+
+<button onclick="playWord()">▶️ Play</button>
+<button onclick="translateWord()">🔄 Translate</button>
+
+<div id="translation"></div>
+
+<script>
+    // Озвучення слова
+    function playWord() {
+        const word = document.getElementById("wordInput").value.trim();
+        if (!word) return alert("Введи слово!");
+
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = "en-US";
+        speechSynthesis.speak(utterance);
+    }
+
+    // Переклад слова (API MyMemory)
+    async function translateWord() {
+        const word = document.getElementById("wordInput").value.trim();
+        if (!word) return alert("Введи слово!");
+
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|uk`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const translation = data.responseData.translatedText;
+
+        document.getElementById("translation").innerText = translation;
+    }
+</script>
+
+</body>
+</html>
